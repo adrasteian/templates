@@ -26,21 +26,22 @@
 
 import argparse
 import os
+import pretty_log as p_l
 
 def process_file(path_name,file_name):
     full_name = os.path.join(path_name, file_name)
     if not os.path.isdir(full_name):
-        print("f: <%s>:<%s>"%(path_name, file_name))
+        p_l.out("f: <%s>:<%s>"%(path_name, file_name))
 
 def process_dir(path_name,dir_name):
-    print("d: <%s>:<%s>"%(path_name,dir_name))
+    p_l.out("d: <%s>:<%s>"%(path_name,dir_name))
     path_name = os.path.join(path_name,dir_name)
     dirlist=os.listdir(path_name)
     for file_name in dirlist:
         process_file(path_name,file_name)
 
 def process_tree(tree_name):
-    print("t: tree_name: <%s>"%(tree_name))
+    p_l.out("t: tree_name: <%s>"%(tree_name))
     process_dir('', tree_name)
     for path_name, dir_names, filenames in os.walk(tree_name):
         for dir_name in dir_names:
@@ -51,13 +52,23 @@ def main():
     parser = argparse.ArgumentParser(description='Process some folder trees.')
 
     parser.add_argument('-t', '--trees', nargs='+', help='paths of trees to process', required=True)
+    parser.add_argument('-d', '--debug', help='output additional debug logs', action='store_true')
+    parser.add_argument('-v', '--verbose', help='verbose output', action='store_true')
 
     args = parser.parse_args()
+    p_l.set_db(args.debug)
+    p_l.set_vb(args.verbose)
 
     for tree in args.trees:
         process_tree(tree)
 
-    print("Hello world!")
+    p_l.out("Hello world!")
+
+    p_l.print_info("Info!")
+    p_l.print_debug("Debug!")
+    p_l.print_success("Success!")
+    p_l.print_warning("Warning!")
+    p_l.print_error("Error!")
 
 if __name__ == "__main__":
 
