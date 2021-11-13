@@ -47,15 +47,8 @@ def process_tree(tree_name):
         for dir_name in dir_names:
             process_dir(path_name,dir_name)
 
-def main():
+def main(args):
 
-    parser = argparse.ArgumentParser(description='Process some folder trees.')
-
-    parser.add_argument('-t', '--trees', nargs='+', help='paths of trees to process', required=True)
-    parser.add_argument('-d', '--debug', help='output additional debug logs', action='store_true')
-    parser.add_argument('-v', '--verbose', help='verbose output', action='store_true')
-
-    args = parser.parse_args()
     p_l.set_db(args.debug)
     p_l.set_vb(args.verbose)
 
@@ -72,4 +65,12 @@ def main():
 
 if __name__ == "__main__":
 
-    main()
+    parser = argparse.ArgumentParser(description='Process some folder trees.')
+
+    parser.add_argument('-t', '--trees', nargs='+', help='paths of trees to process', required=True)
+    parser.add_argument('-d', '--debug', help='output additional debug logs', action='store_true')
+    parser.add_argument('-v', '--verbose', help='verbose output', action='store_true')
+
+    args = parser.parse_args()
+
+    main(args)
