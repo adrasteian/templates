@@ -52,10 +52,11 @@ def main(args):
     p_l.set_db(args.debug)
     p_l.set_vb(args.verbose)
 
+    p_l.out("Hello world!")
+    p_l.out(args.trees)
+
     for tree in args.trees:
         process_tree(tree)
-
-    p_l.out("Hello world!")
 
     p_l.print_info("Info!")
     p_l.print_debug("Debug!")

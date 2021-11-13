@@ -33,9 +33,12 @@ class TestArgs():
     verbose = True
 
 def main():
+
     print("Hello!")
     args = TestArgs()
-    args.trees="."
+    args.trees= ["src"]
+
+    print(args.trees)
     foo.main(args)
 
 if __name__ == "__main__":
