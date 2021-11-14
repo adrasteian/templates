@@ -24,8 +24,21 @@
 # SOFTWARE.
 ###############################################################################
 
+printer = None
+
 vb = False
 db = False
+
+num_debug = 0
+num_error = 0
+num_info = 0
+num_success = 0
+num_warning = 0
+
+class Printer:
+
+    def out(self,msg):
+        print(msg)
 
 class Esc:
 
@@ -71,6 +84,22 @@ class Prefix:
 
     SEP     = " : "
 
+def init():
+    global num_debug
+    global num_error
+    global num_info
+    global num_success
+    global num_warning
+    num_debug = 0
+    num_error = 0
+    num_info = 0
+    num_success = 0
+    num_warning = 0
+
+def set_printer(p):
+    global printer
+    printer = p
+
 def set_db(debug):
     global db
     db = debug
@@ -80,34 +109,65 @@ def set_vb(verbose):
     vb = verbose
 
 def out(msg):
-    print(msg)
+    if None==printer:
+        set_printer(Printer())
+    printer.out(msg)
 
 def print_escaped(color,prefix,msg):
     out(color+prefix+Esc.END+Prefix.SEP+msg)
 
 def print_debug(msg):
+    global num_debug
     if db:
         print_escaped(Esc.LIGHT_GRAY,Prefix.DEBUG,msg)
+        num_debug = num_debug + 1
+
+def get_num_debug():
+    global num_debug
+    return num_debug
 
 def print_error(msg):
+    global num_error
     if vb:
         print_escaped(Esc.RED,Prefix.ERROR,msg)
+        num_error = num_error + 1
+
+def get_num_error():
+    global num_error
+    return num_error
 
 def print_info(msg):
+    global num_info
     if vb:
         print_escaped(Esc.CYAN,Prefix.INFO,msg)
+        num_info = num_info + 1
+
+def get_num_info():
+    global num_info
+    return num_info
 
 def print_success(msg):
+    global num_success
     if vb:
         print_escaped(Esc.GREEN,Prefix.SUCCESS,msg)
+        num_success = num_success + 1
+
+def get_num_success():
+    global num_success
+    return num_success
 
 def print_warning(msg):
+    global num_warning
     if vb:
         print_escaped(Esc.ORANGE,Prefix.WARNING,msg)
+        num_warning= num_warning + 1
+
+def get_num_warning():
+    global num_warning
+    return num_warning
 
 def main():
     pass
 
 if __name__ == "__main__":
-
     main()

@@ -22,4 +22,4 @@
 # SOFTWARE.
 ###############################################################################
 
-print("src/main/python/__init__.py")
+#print("src/main/python/__init__.py")

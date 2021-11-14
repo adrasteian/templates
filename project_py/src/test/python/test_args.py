@@ -25,21 +25,62 @@
 ###############################################################################
 
 from ...main.python import foo
+from ...main.python import pretty_log as p_l
 
-class TestArgs():
+import sys
+import unittest
 
-    debug = True
-    trees = None
-    verbose = True
+class Printer:
 
-def main():
+    def out(self,msg):
+        pass
 
-    print("Hello!")
-    args = TestArgs()
-    args.trees= ["src"]
+class TestArgs(unittest.TestCase):
 
-    print(args.trees)
-    foo.main(args)
+    def setUp(self):
+        p_l.set_printer(Printer())
+
+    def test_option_no_debug(self):
+
+        # no -d/--debug option
+        foo.set_argv(['foo.py','-t','.'])
+        foo.main()
+
+        # ...should not be any debug logs
+        self.assertTrue(0==p_l.get_num_debug())
+
+    def test_option_d_enabled(self):
+
+        # specify -d option
+        foo.set_argv(['foo.py','-d','-t','.'])
+        foo.main()
+
+        # ...should be at least one debug log
+        self.assertTrue(0<p_l.get_num_debug())
+
+    def test_option_debug_enabled(self):
+
+        # specify -d option
+        foo.set_argv(['foo.py','--debug','-t','.'])
+        foo.main()
+
+        # ...should be at least one debug log
+        self.assertTrue(0<p_l.get_num_debug())
+
+    def test_option_v_enabled(self):
+
+        # specify -d option
+        foo.set_argv(['foo.py','-v','-t','.'])
+        foo.main()
+
+        # ...should be no debug logs
+        self.assertTrue(0==p_l.get_num_debug())
+        # ...and at least 1 other log
+        total_logs = p_l.get_num_error() + p_l.get_num_info() + p_l.get_num_success() + p_l.get_num_warning()
+
+        self.assertTrue(0<total_logs)
+
+# python -m src.test.python.test_args
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

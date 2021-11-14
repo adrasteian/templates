@@ -27,6 +27,15 @@
 import argparse
 import os
 import pretty_log as p_l
+import sys
+
+#   set_argv()
+#
+#   Test helper function, allows tests to drive options into
+#   main() as if from the command line
+#
+def set_argv(argv):
+    sys.argv = argv
 
 def process_file(path_name,file_name):
     full_name = os.path.join(path_name, file_name)
@@ -47,8 +56,17 @@ def process_tree(tree_name):
         for dir_name in dir_names:
             process_dir(path_name,dir_name)
 
-def main(args):
+def main():
 
+    parser = argparse.ArgumentParser(description='Process some folder trees.')
+
+    parser.add_argument('-t', '--trees', nargs='+', help='paths of trees to process', required=True)
+    parser.add_argument('-d', '--debug', help='output additional debug logs', action='store_true')
+    parser.add_argument('-v', '--verbose', help='verbose output', action='store_true')
+
+    args = parser.parse_args()
+
+    p_l.init()
     p_l.set_db(args.debug)
     p_l.set_vb(args.verbose)
 
@@ -65,13 +83,4 @@ def main(args):
     p_l.print_error("Error!")
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Process some folder trees.')
-
-    parser.add_argument('-t', '--trees', nargs='+', help='paths of trees to process', required=True)
-    parser.add_argument('-d', '--debug', help='output additional debug logs', action='store_true')
-    parser.add_argument('-v', '--verbose', help='verbose output', action='store_true')
-
-    args = parser.parse_args()
-
-    main(args)
+    main()
